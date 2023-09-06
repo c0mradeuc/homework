@@ -1,7 +1,7 @@
 const { getProfile } = require('../middleware/getProfile')
 const { Op } = require('sequelize')
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
 /**
  * Search for a contract by id that belongs to the profile that's querying.
