@@ -1,0 +1,24 @@
+{
+    "env": {
+        "browser": false,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "google",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "globals": {
+        "console": true
+    },
+    "rules": {
+        "require-jsdoc": 0,
+        "indent": ["error", 2],
+        "object-curly-spacing": 0,
+        "no-undef": "error",
+        "semi": ["warn", "never"],
+        "new-cap": "off",
+        "comma-dangle": "off",
+        "max-len": ["warn", 150]
+    }
+}
