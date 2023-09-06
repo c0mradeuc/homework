@@ -1,6 +1,4 @@
 const { getProfile } = require('../middleware/getProfile')
-const ContractStatus = require('../enums/contract_status')
-const { Op } = require('sequelize')
 const ContractsRepository = require('../repositories/contracts')
 const express = require('express')
 const router = express.Router()
