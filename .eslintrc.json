@@ -13,6 +13,7 @@
     },
     "rules": {
         "require-jsdoc": 0,
+        "valid-jsdoc": ["warn", { "requireParamType": false, "requireReturnType": false }],
         "indent": ["error", 2],
         "object-curly-spacing": 0,
         "no-undef": "error",
