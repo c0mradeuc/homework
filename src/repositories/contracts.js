@@ -12,7 +12,7 @@ class ContractsRepository {
    * @param {number} profileId The profile id
    * @param {number} profileType The profile type
    * @param {number} contractId The contract id
-   * @returns {Promise<Contract>} the found contract.
+   * @return {Promise<Contract>} the found contract.
    */
   async findById(profileId, profileType, contractId) {
     const query = {
@@ -39,6 +39,25 @@ class ContractsRepository {
         status: {
           [Op.in]: [ContractStatus.New, ContractStatus.InProgress]
         }
+      }
+    }
+
+    if (profileType === ProfileType.Client) query.where.ClientId = profileId
+    else if (profileType === ProfileType.Contractor) query.where.ContractorId = profileId
+
+    return await this.contractDb.findAll(query)
+  }
+
+  /**
+   * Seeks for active contracts belongs to the profile that's requesting.
+   * @param {number} profileId The profile id
+   * @param {number} profileType The profile type
+   * @return {Promise<Contract[]>} a list of contracts
+   */
+  async findActiveContracts(profileId, profileType) {
+    const query = {
+      where: {
+        status: ContractStatus.InProgress
       }
     }
 
