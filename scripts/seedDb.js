@@ -1,7 +1,13 @@
-// const { Profile, Contract, Job } = require('../src/model');
 const Profile = require('../src/models/profile')
 const Job = require('../src/models/job')
 const Contract = require('../src/models/contract')
+
+Profile.hasMany(Contract, { as: 'Contractor', foreignKey: 'ContractorId' })
+Profile.hasMany(Contract, { as: 'Client', foreignKey: 'ClientId' })
+Contract.belongsTo(Profile, { as: 'Contractor' })
+Contract.belongsTo(Profile, { as: 'Client' })
+Contract.hasMany(Job)
+Job.belongsTo(Contract)
 
 /* WARNING THIS WILL DROP THE CURRENT DATABASE */
 seed()
