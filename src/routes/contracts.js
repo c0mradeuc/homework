@@ -10,7 +10,7 @@ router.get('/:id', getProfile, async (req, res) => {
   const { Contract } = req.app.get('models')
   const { id } = req.params
   const repository = new ContractsRepository(Contract)
-  const contract = await repository.findById(req.profile.id, id)
+  const contract = await repository.findById(req.profile.id, req.profile.type, id)
 
   if (!contract) return res.status(404).end()
 
@@ -23,7 +23,7 @@ router.get('/:id', getProfile, async (req, res) => {
 router.get('/', getProfile, async (req, res) => {
   const { Contract } = req.app.get('models')
   const repository = new ContractsRepository(Contract)
-  const contracts = await repository.findNonTerminatedContracts(req.profile.id)
+  const contracts = await repository.findNonTerminatedContracts(req.profile.id, req.profile.type)
 
   res.json(contracts)
 })
