@@ -30,6 +30,8 @@ class ProfileRepository {
       await contractor.save({ transaction: t })
       await job.save({ transaction: t })
       await t.commit()
+
+      return { client, contractor, job }
     }
     catch (error) {
       await t.rollback()

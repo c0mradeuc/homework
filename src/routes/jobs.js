@@ -41,9 +41,9 @@ router.post('/:job_id/pay', getProfile, async (req, res) => {
   if (!contract) return res.status(HttpStatus.Forbidden).json({ message: 'The client is not authorized to pay for this job' }).end()
   if (profile.balance < job.price) return res.status(HttpStatus.NotAcceptable).json({ message: 'The client does not has enough balance to pay for this job' }).end()
 
-  await profileRepo.payJob(contract.ClientId, contract.ContractorId, job.id)
+  const result = await profileRepo.payJob(contract.ClientId, contract.ContractorId, job.id)
 
-  res.json({ job, profile, contract })
+  res.json(result)
 })
 
 module.exports = router
