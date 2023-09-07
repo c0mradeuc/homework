@@ -3,8 +3,8 @@ const getProfile = async (req, res, next) => {
 
   if (!profileId) return res.status(401).end()
 
-  const { Profile } = req.app.get('models')
-  const profile = await Profile.findOne({ where: { id: profileId } })
+  const { profileRepository } = req.app.get('repositories')
+  const profile = await profileRepository.getProfileById(Number(profileId))
 
   if (!profile) return res.status(401).end()
 

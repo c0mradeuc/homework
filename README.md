@@ -101,7 +101,8 @@ Thank you and good luck! 🙏
 ## Developer Notes
 
 TODO List:
-- Add input validations in the routes
+- Add input validations to the routes
 - Improve error handling using a middleware}
 - Some optimizations like caching profile in getProfile middleware or in database queries
 - More e2e and unit testing
+- Some documentation

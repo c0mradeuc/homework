@@ -2,6 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const sequelize = require('./sequelize')
 const errorHandling = require('./middleware/errorHandling')
+const JobsRepository = require('./repositories/jobs')
+const ProfileRepository = require('./repositories/profiles')
+const ContractsRepository = require('./repositories/contracts')
 const app = express()
 
 // Import sequelize models
@@ -17,10 +20,18 @@ Contract.belongsTo(Profile, { as: 'Client' })
 Contract.hasMany(Job)
 Job.belongsTo(Contract)
 
+// Create repository instances
+const repos = {
+  jobsRepository: new JobsRepository(Job),
+  profilesRepository: new ProfileRepository(Profile, sequelize, Job),
+  contractsRepository: new ContractsRepository(Contract)
+}
+
 // Config express
 app.use(bodyParser.json())
 app.set('sequelize', sequelize)
 app.set('models', sequelize.models)
+app.set('repositories', repos)
 
 // Import routes
 const contracts = require('./routes/contracts')
