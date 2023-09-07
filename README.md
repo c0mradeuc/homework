@@ -102,4 +102,5 @@ Thank you and good luck! 🙏
 
 TODO List:
 - Add input validations in the routes
-- Improve error handling using a middleware
+- Improve error handling using a middleware}
+- Some optimizations like caching profile in getProfile middleware

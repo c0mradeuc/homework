@@ -19,6 +19,7 @@
         "semi": ["warn", "never"],
         "new-cap": "off",
         "comma-dangle": "off",
-        "max-len": ["warn", 200]
+        "max-len": ["warn", 200],
+        "brace-style": ["warn", "stroustrup"]
     }
 }

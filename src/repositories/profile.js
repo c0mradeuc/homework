@@ -53,6 +53,15 @@ class ProfileRepository {
 
     return client
   }
+
+  /**
+   * Find a user profile by its id
+   * @param {number} userId The user id
+   * @return {Promise<Profile>} The user profile
+   */
+  async getProfileById(userId) {
+    return await this.profilesDb.findOne({ where: { id: userId } })
+  }
 }
 
 module.exports = ProfileRepository

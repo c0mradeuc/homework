@@ -1,4 +1,5 @@
 const { Op } = require('sequelize')
+const Contract = require('../models/contract')
 
 class JobsRepository {
   constructor(jobsDb) {
@@ -30,6 +31,21 @@ class JobsRepository {
    */
   async findJobById(jobId) {
     return await this.jobsDb.findOne({ where: { id: jobId }})
+  }
+
+  async findPaidJobs(start, end) {
+    const query = {
+      where: {
+        paid: true,
+        paymentDate: {
+          [Op.lte]: end,
+          [Op.gte]: start
+        }
+      },
+      include: Contract
+    }
+
+    return await this.jobsDb.findAll(query)
   }
 }
 
