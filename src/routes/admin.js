@@ -50,22 +50,14 @@ router.get('/best-clients', getProfile, async (req, res) => {
   const paidJobs = await jobsRepo.findPaidJobs(start, end)
   let bestClients = []
 
-  if (paidJobs.length === 0) res.json({ bestClients })
-
-  const paymentsReceivedByClient = {}
+  if (paidJobs.length === 0) return res.json({ bestClients })
 
   for (const job of paidJobs) {
     const jobClientId = job.Contract.ClientId
+    const clientIndex = bestClients.findIndex((c) => c.id === jobClientId)
 
-    if (paymentsReceivedByClient[jobClientId]) paymentsReceivedByClient[jobClientId] += job.price
-    else paymentsReceivedByClient[jobClientId] = job.price
-  }
-
-  for (const userId in paymentsReceivedByClient) {
-    if (Object.hasOwn(paymentsReceivedByClient, userId)) {
-      const totalPaid = paymentsReceivedByClient[userId]
-      bestClients.push({ id: Number(userId), paid: totalPaid })
-    }
+    if (clientIndex > -1) bestClients[clientIndex].paid += job.price
+    else bestClients.push({ id: Number(jobClientId), paid: job.price })
   }
 
   bestClients = bestClients.sort((a, b) => b.paid - a.paid).slice(0, limit)
@@ -75,7 +67,7 @@ router.get('/best-clients', getProfile, async (req, res) => {
     client.fullName = `${profile.firstName} ${profile.lastName}`
   }
 
-  res.json({ bestClients })
+  return res.json({ bestClients })
 })
 
 module.exports = router
