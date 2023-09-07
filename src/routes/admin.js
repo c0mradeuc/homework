@@ -1,7 +1,9 @@
 const { getProfile } = require('../middleware/getProfile')
 const { baseRouteBuilder } = require('../middleware/errorHandling')
+const validateModel = require('../middleware/validateModel')
 const express = require('express')
 const router = express.Router()
+const Joi = require('joi')
 
 const defaultLimit = 2
 
@@ -71,7 +73,18 @@ async function getBestclient(req, res) {
   return res.json({ bestClients })
 }
 
-router.get('/best-profession', getProfile, baseRouteBuilder(getBestProfession))
-router.get('/best-clients', getProfile, baseRouteBuilder(getBestclient))
+const bestProfessionSchema = Joi.object({
+  start: Joi.date().required(),
+  end: Joi.date().required(),
+})
+
+const bestClientSchema = Joi.object({
+  start: Joi.date().required(),
+  end: Joi.date().required(),
+  limit: Joi.number().min(0).max(99)
+})
+
+router.get('/best-profession', getProfile, validateModel(bestProfessionSchema), baseRouteBuilder(getBestProfession))
+router.get('/best-clients', getProfile, validateModel(bestClientSchema), baseRouteBuilder(getBestclient))
 
 module.exports = router
