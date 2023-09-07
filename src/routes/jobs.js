@@ -1,3 +1,4 @@
+const { baseRouteBuilder } = require('../middleware/errorHandling')
 const { getProfile } = require('../middleware/getProfile')
 const express = require('express')
 const router = express.Router()
@@ -6,20 +7,24 @@ const HttpStatus = require('../enums/http_status')
 
 /**
  * Seeks for a unpaid jobs for the given user in active contracts
+ * @param {*} req Express request object
+ * @param {*} res Express response object
  */
-router.get('/unpaid', getProfile, async (req, res) => {
+async function getUnpaidJobs(req, res) {
   const { jobsRepository, contractsRepository } = req.app.get('repositories')
   const activeContracts = await contractsRepository.findActiveContracts(req.profile.id, req.profile.type)
   const contractIds = activeContracts.map((c) => c.id)
   const unpaidJobs = await jobsRepository.findUnpaidJobs(contractIds)
 
   res.json(unpaidJobs)
-})
+}
 
 /**
  * Pay for a job
+ * @param {*} req Express request object
+ * @param {*} res Express response object
  */
-router.post('/:jobId/pay', getProfile, async (req, res) => {
+async function payJob(req, res) {
   const profile = req.profile
   if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.BadRequest).json({ message: 'A Contractor profile cannot pay a job' }).end()
   const { jobsRepository, profilesRepository, contractsRepository } = req.app.get('repositories')
@@ -35,6 +40,9 @@ router.post('/:jobId/pay', getProfile, async (req, res) => {
   const result = await profilesRepository.payJob(contract.ClientId, contract.ContractorId, job.id)
 
   res.json(result)
-})
+}
+
+router.get('/unpaid', getProfile, baseRouteBuilder(getUnpaidJobs))
+router.post('/:jobId/pay', getProfile, baseRouteBuilder(payJob))
 
 module.exports = router

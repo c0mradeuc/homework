@@ -3,13 +3,16 @@ const express = require('express')
 const router = express.Router()
 const ProfileType = require('../enums/profile_type')
 const HttpStatus = require('../enums/http_status')
+const { baseRouteBuilder } = require('../middleware/errorHandling')
 
 const totalDebtMaxPercentageDeposit = 0.25
 
 /**
  * Deposits money into the balance of a client
+ * @param {*} req Express request object
+ * @param {*} res Express response object
  */
-router.post('/deposit/:userId', getProfile, async (req, res) => {
+async function depositBalance(req, res) {
   const profile = req.profile
   const depositAmount = req.body.amount
   if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.BadRequest).json({ message: 'A Client profile cannot deposit money into its balance' }).end()
@@ -25,6 +28,8 @@ router.post('/deposit/:userId', getProfile, async (req, res) => {
   const client = await profilesRepository.balanceDeposit(profile.id, depositAmount)
 
   res.json({ client })
-})
+}
+
+router.post('/deposit/:userId', getProfile, baseRouteBuilder(depositBalance))
 
 module.exports = router
