@@ -9,7 +9,8 @@
         "ecmaVersion": "latest"
     },
     "globals": {
-        "console": true
+        "console": true,
+        "process": true
     },
     "rules": {
         "require-jsdoc": 0,

@@ -1,4 +1,5 @@
 const { getProfile } = require('../middleware/getProfile')
+const { baseRouteBuilder } = require('../middleware/errorHandling')
 const express = require('express')
 const router = express.Router()
 
@@ -6,8 +7,10 @@ const defaultLimit = 2
 
 /**
  * Search for the most paid profession in a given time range
+ * @param {*} req Express request object
+ * @param {*} res Express response object
  */
-router.get('/best-profession', getProfile, async (req, res) => {
+async function getBestProfession(req, res) {
   const { start, end } = req.query
   const { jobsRepository, profilesRepository } = req.app.get('repositories')
   const paidJobs = await jobsRepository.findPaidJobs(start, end)
@@ -33,12 +36,14 @@ router.get('/best-profession', getProfile, async (req, res) => {
   const user = await profilesRepository.getProfileById(Number(maxPaymentProfileId))
 
   res.json({ profession: user.profession })
-})
+}
 
 /**
  * Search the clients that paid the most for jobs in a given time range
+ * @param {*} req Express request object
+ * @param {*} res Express response object
  */
-router.get('/best-clients', getProfile, async (req, res) => {
+async function getBestclient(req, res) {
   const { start, end, limit = defaultLimit } = req.query
   const { jobsRepository, profilesRepository } = req.app.get('repositories')
   const paidJobs = await jobsRepository.findPaidJobs(start, end)
@@ -64,6 +69,9 @@ router.get('/best-clients', getProfile, async (req, res) => {
   }
 
   return res.json({ bestClients })
-})
+}
+
+router.get('/best-profession', getProfile, baseRouteBuilder(getBestProfession))
+router.get('/best-clients', getProfile, baseRouteBuilder(getBestclient))
 
 module.exports = router

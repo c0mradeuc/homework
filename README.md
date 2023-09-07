@@ -102,7 +102,8 @@ Thank you and good luck! 🙏
 
 TODO List:
 - Add input validations to the routes
-- Improve error handling using a middleware}
-- Some optimizations like caching profile in getProfile middleware or in database queries
+- Improve error handling. For ex. returning the corresponding http response code depending on the error type
+- Some optimizations like caching the user profile in getProfile middleware or in database queries
 - More e2e and unit testing
 - Some documentation
+- Maybe not declaring model relationships in app.js 

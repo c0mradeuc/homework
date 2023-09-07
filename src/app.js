@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const sequelize = require('./sequelize')
-const errorHandling = require('./middleware/errorHandling')
+const { errorHandling } = require('./middleware/errorHandling')
 const JobsRepository = require('./repositories/jobs')
 const ProfileRepository = require('./repositories/profiles')
 const ContractsRepository = require('./repositories/contracts')
