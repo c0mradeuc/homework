@@ -101,8 +101,7 @@ Thank you and good luck! 🙏
 ## Developer Notes
 
 TODO List:
-- Improve error handling. For ex. returning the corresponding http response code based on the error type
 - Some optimizations like caching the user profile in getProfile middleware or in database queries
 - More e2e and unit testing
-- Some documentation
+- More documentation
 - Maybe not declaring model relationships in app.js 

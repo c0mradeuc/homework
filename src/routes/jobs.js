@@ -6,6 +6,7 @@ const ProfileType = require('../enums/profileType')
 const HttpStatus = require('../enums/httpStatus')
 const validateModel = require('../middleware/validateModel')
 const Joi = require('joi')
+const BadRequestError = require('../errorHandling/badRequestError')
 
 /**
  * Seeks for a unpaid jobs for the given user in active contracts
@@ -28,7 +29,7 @@ async function getUnpaidJobs(req, res) {
  */
 async function payJob(req, res) {
   const profile = req.profile
-  if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.BadRequest).json({ message: 'A Contractor profile cannot pay a job' }).end()
+  if (profile.type === ProfileType.Contractor) throw new BadRequestError('A Contractor profile cannot pay a job')
   const { jobsRepository, profilesRepository, contractsRepository } = req.app.get('repositories')
   const jobId = Number(req.params.jobId)
   const job = await jobsRepository.findJobById(jobId, profile.id)
