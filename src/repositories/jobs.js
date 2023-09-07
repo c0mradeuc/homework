@@ -30,9 +30,15 @@ class JobsRepository {
    * @return {Promise<Job>} The found job
    */
   async findJobById(jobId) {
-    return await this.jobsDb.findOne({ where: { id: jobId }})
+    return await this.jobsDb.findOne({ where: { id: jobId } })
   }
 
+  /**
+   * Find paid jobs in a given time range
+   * @param {Date} start The date start
+   * @param {Date} end The date end
+   * @return {Promise<Job[]>} A list of jobs
+   */
   async findPaidJobs(start, end) {
     const query = {
       where: {
