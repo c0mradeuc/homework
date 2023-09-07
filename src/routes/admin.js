@@ -31,7 +31,7 @@ router.get('/best-profession', getProfile, async (req, res) => {
     }
   }
 
-  if (!maxPaymentProfileId) res.json({ profession: null })
+  if (!maxPaymentProfileId) return res.json({ profession: null })
 
   const user = await profileRepo.getProfileById(Number(maxPaymentProfileId))
 
