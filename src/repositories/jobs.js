@@ -22,6 +22,15 @@ class JobsRepository {
 
     return await this.jobsDb.findAll(query)
   }
+
+  /**
+   * Seeks a job by its id
+   * @param {number} jobId The job id
+   * @return {Promise<Job>} The found job
+   */
+  async findJobById(jobId) {
+    return await this.jobsDb.findOne({ where: { id: jobId }})
+  }
 }
 
 module.exports = JobsRepository
