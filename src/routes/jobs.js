@@ -24,12 +24,12 @@ router.get('/unpaid', getProfile, async (req, res) => {
 /**
  * Pay for a job
  */
-router.post('/:job_id/pay', getProfile, async (req, res) => {
+router.post('/:jobId/pay', getProfile, async (req, res) => {
   const profile = req.profile
   if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.BadRequest).json({ message: 'A Contractor profile cannot pay a job' }).end()
   const { Contract, Job, Profile } = req.app.get('models')
   const sequelize = req.app.get('sequelize')
-  const jobId = Number(req.params.job_id)
+  const jobId = Number(req.params.jobId)
   const jobsRepo = new JobsRepository(Job)
   const contractRepo = new ContractsRepository(Contract)
   const profileRepo = new ProfileRepository(Profile, sequelize, Job)

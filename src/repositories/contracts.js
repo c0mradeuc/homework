@@ -28,24 +28,33 @@ class ContractsRepository {
   }
 
   /**
+   * Seeks for terminated contracts belongs to the profile that's requesting and in given statuses
+   * @param {number} profileId The profile id
+   * @param {number} profileType The profile type
+   * @param {string[]} statuses The profile type
+   * @return {Promise<Contract[]>} a list of contracts
+   */
+  async findContracts(profileId, profileType, statuses = []) {
+    const query = { where: {} }
+
+    if (statuses && statuses.length === 1) query.where.status = statuses[0]
+    else if (statuses && statuses.length > 1) query.where.status = { [Op.in]: statuses }
+
+    if (profileType === ProfileType.Client) query.where.ClientId = profileId
+    else if (profileType === ProfileType.Contractor) query.where.ContractorId = profileId
+
+    console.log(query)
+    return await this.contractDb.findAll(query)
+  }
+
+  /**
    * Seeks for non terminated contracts belongs to the profile that's requesting.
    * @param {number} profileId The profile id
    * @param {number} profileType The profile type
    * @return {Promise<Contract[]>} a list of contracts
    */
   async findNonTerminatedContracts(profileId, profileType) {
-    const query = {
-      where: {
-        status: {
-          [Op.in]: [ContractStatus.New, ContractStatus.InProgress]
-        }
-      }
-    }
-
-    if (profileType === ProfileType.Client) query.where.ClientId = profileId
-    else if (profileType === ProfileType.Contractor) query.where.ContractorId = profileId
-
-    return await this.contractDb.findAll(query)
+    return await this.findContracts(profileId, profileType, [ContractStatus.New, ContractStatus.InProgress])
   }
 
   /**
@@ -55,16 +64,7 @@ class ContractsRepository {
    * @return {Promise<Contract[]>} a list of contracts
    */
   async findActiveContracts(profileId, profileType) {
-    const query = {
-      where: {
-        status: ContractStatus.InProgress
-      }
-    }
-
-    if (profileType === ProfileType.Client) query.where.ClientId = profileId
-    else if (profileType === ProfileType.Contractor) query.where.ContractorId = profileId
-
-    return await this.contractDb.findAll(query)
+    return await this.findContracts(profileId, profileType, [ContractStatus.InProgress])
   }
 }
 

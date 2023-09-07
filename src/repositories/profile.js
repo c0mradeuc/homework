@@ -38,6 +38,21 @@ class ProfileRepository {
       throw error
     }
   }
+
+  /**
+   * Deposit money into client balance
+   * @param {number} clientId The client id
+   * @param {number} amount The amount to deposit
+   */
+  async balanceDeposit(clientId, amount) {
+    const client = await this.profilesDb.findByPk(clientId)
+
+    client.balance += amount
+
+    await client.save()
+
+    return client
+  }
 }
 
 module.exports = ProfileRepository
