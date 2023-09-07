@@ -4,6 +4,8 @@ const router = express.Router()
 const ProfileType = require('../enums/profile_type')
 const HttpStatus = require('../enums/http_status')
 const { baseRouteBuilder } = require('../middleware/errorHandling')
+const validateModel = require('../middleware/validateModel')
+const Joi = require('joi')
 
 const totalDebtMaxPercentageDeposit = 0.25
 
@@ -13,11 +15,12 @@ const totalDebtMaxPercentageDeposit = 0.25
  * @param {*} res Express response object
  */
 async function depositBalance(req, res) {
-  const profile = req.profile
-  const depositAmount = req.body.amount
-  if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.BadRequest).json({ message: 'A Client profile cannot deposit money into its balance' }).end()
-
   const { jobsRepository, profilesRepository, contractsRepository } = req.app.get('repositories')
+  const profile = await profilesRepository.getProfileById(Number(req.params.userId))
+  const depositAmount = req.body.amount
+
+  if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.NotAcceptable).json({ message: 'A Contractor profile cannot deposit money into its balance' }).end()
+
   const contracts = await contractsRepository.findContracts(profile.id, profile.type)
   const contractIds = contracts.map((c) => c.id)
   const unpaidJobs = await jobsRepository.findUnpaidJobs(contractIds)
@@ -30,6 +33,11 @@ async function depositBalance(req, res) {
   res.json({ client })
 }
 
-router.post('/deposit/:userId', getProfile, baseRouteBuilder(depositBalance))
+const depositBalanceSchema = Joi.object({
+  userId: Joi.number().required(),
+  amount: Joi.number().min(1).required(),
+})
+
+router.post('/deposit/:userId', getProfile, validateModel(depositBalanceSchema), baseRouteBuilder(depositBalance))
 
 module.exports = router

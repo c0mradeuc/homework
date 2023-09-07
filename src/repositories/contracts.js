@@ -43,7 +43,6 @@ class ContractsRepository {
     if (profileType === ProfileType.Client) query.where.ClientId = profileId
     else if (profileType === ProfileType.Contractor) query.where.ContractorId = profileId
 
-    console.log(query)
     return await this.contractDb.findAll(query)
   }
 
