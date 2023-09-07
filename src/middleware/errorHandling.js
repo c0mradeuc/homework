@@ -1,3 +1,5 @@
+const ModelValidationError = require('../errorHandling/modelValidationError')
+
 /**
  * Error handling midleware
  * @param {*} error Express error object
@@ -7,7 +9,13 @@
  */
 const errorHandling = async (error, req, res, next) => {
   console.error(error)
-  res.status(500).json({ error: 'Internal Server Error', message: error.message })
+
+  if (error instanceof ModelValidationError) {
+    res.status(400).json({ message: error.message, error: error.errors })
+  }
+  else {
+    res.status(500).json({ message: 'Internal Server Error', error: error.message })
+  }
 }
 
 /**
