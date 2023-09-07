@@ -4,6 +4,8 @@ const express = require('express')
 const router = express.Router()
 const ProfileType = require('../enums/profile_type')
 const HttpStatus = require('../enums/http_status')
+const validateModel = require('../middleware/validateModel')
+const Joi = require('joi')
 
 /**
  * Seeks for a unpaid jobs for the given user in active contracts
@@ -42,7 +44,11 @@ async function payJob(req, res) {
   res.json(result)
 }
 
+const payJobSchema = Joi.object({
+  jobId: Joi.number().required(),
+})
+
 router.get('/unpaid', getProfile, baseRouteBuilder(getUnpaidJobs))
-router.post('/:jobId/pay', getProfile, baseRouteBuilder(payJob))
+router.post('/:jobId/pay', getProfile, validateModel(payJobSchema), baseRouteBuilder(payJob))
 
 module.exports = router
