@@ -1,6 +1,6 @@
 const { Op } = require('sequelize')
-const ContractStatus = require('../enums/contract_status')
-const ProfileType = require('../enums/profile_type')
+const ContractStatus = require('../enums/contractStatus')
+const ProfileType = require('../enums/profileType')
 
 class ContractsRepository {
   constructor(contractDb) {

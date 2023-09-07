@@ -1,4 +1,5 @@
 const ModelValidationError = require('../errorHandling/modelValidationError')
+const HttpStatus = require('../enums/httpStatus')
 
 /**
  * Error handling midleware
@@ -11,10 +12,10 @@ const errorHandling = async (error, req, res, next) => {
   console.error(error)
 
   if (error instanceof ModelValidationError) {
-    res.status(400).json({ message: error.message, error: error.errors })
+    res.status(HttpStatus.BadRequest).json({ message: error.message, error: error.errors })
   }
   else {
-    res.status(500).json({ message: 'Internal Server Error', error: error.message })
+    res.status(HttpStatus.InternalServerError).json({ message: 'Internal Server Error', error: error.message })
   }
 }
 

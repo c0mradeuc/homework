@@ -62,6 +62,7 @@ async function getBestclient(req, res) {
     else bestClients.push({ id: Number(jobClientId), paid: job.price })
   }
 
+  // Sort by most paid and limit responses
   bestClients = bestClients.sort((a, b) => b.paid - a.paid).slice(0, limit)
 
   // Set client full name

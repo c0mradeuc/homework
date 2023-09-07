@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../sequelize')
-const ContractStatus = require('../enums/contract_status')
+const ContractStatus = require('../enums/contractStatus')
 
 class Contract extends Sequelize.Model { }
 Contract.init(
