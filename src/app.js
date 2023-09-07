@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const sequelize = require('./sequelize')
+const errorHandling = require('./middleware/errorHandling')
 const app = express()
 
 // Import sequelize models
@@ -31,5 +32,6 @@ app.use('/contracts', contracts)
 app.use('/jobs', jobs)
 app.use('/balances', balances)
 app.use('/admin', admin)
+app.use(errorHandling)
 
 module.exports = app
