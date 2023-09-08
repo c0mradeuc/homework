@@ -101,8 +101,8 @@ Thank you and good luck! 🙏
 ## Developer Notes
 
 TODO List:
-- Some optimizations like caching the user profile in getProfile middleware or in database queries
-- More e2e testing using supertest and more unit testing
-- More documentation
+- Optimize the user profile in getProfile middleware and maybe something in the database queries
+- Complete routes testing using supertest and more unit testing
 - Move model relationships in app.js to another file and remove copy from seed
 - Implement per environment config
+- More documentation
