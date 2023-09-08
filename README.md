@@ -104,4 +104,5 @@ TODO List:
 - Some optimizations like caching the user profile in getProfile middleware or in database queries
 - More e2e and unit testing
 - More documentation
-- Maybe not declaring model relationships in app.js 
+- Move model relationships in app.js to another file and remove copy from seed
+- Implement per environment config
