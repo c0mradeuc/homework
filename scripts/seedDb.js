@@ -9,8 +9,10 @@ Contract.belongsTo(Profile, { as: 'Client' })
 Contract.hasMany(Job)
 Job.belongsTo(Contract)
 
+const isTesting = process.env.NODE_ENV === 'test'
+
 /* WARNING THIS WILL DROP THE CURRENT DATABASE */
-seed()
+if (!isTesting) seed()
 
 async function seed() {
   // create tables
@@ -237,3 +239,5 @@ async function seed() {
 
   ])
 }
+
+module.exports = seed
