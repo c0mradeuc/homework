@@ -102,7 +102,7 @@ Thank you and good luck! 🙏
 
 TODO List:
 - Some optimizations like caching the user profile in getProfile middleware or in database queries
-- More e2e and unit testing
+- More e2e testing using supertest and more unit testing
 - More documentation
 - Move model relationships in app.js to another file and remove copy from seed
 - Implement per environment config
