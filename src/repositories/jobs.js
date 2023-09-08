@@ -14,7 +14,7 @@ class JobsRepository {
   async findUnpaidJobs(contractIds) {
     const query = {
       where: {
-        contractId: {
+        ContractId: {
           [Op.in]: contractIds
         },
         paid: false
