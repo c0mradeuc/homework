@@ -12,6 +12,10 @@ const Profile = require('./models/profile')
 const Job = require('./models/job')
 const Contract = require('./models/contract')
 
+Profile.associations = {}
+Contract.associations = {}
+Job.associations = {}
+
 // Configure relationships
 Profile.hasMany(Contract, { as: 'Contractor', foreignKey: 'ContractorId' })
 Profile.hasMany(Contract, { as: 'Client', foreignKey: 'ClientId' })
