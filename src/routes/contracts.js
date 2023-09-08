@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router()
 const validateModel = require('../middleware/validateModel')
 const Joi = require('joi')
+const NotFoundError = require('../errorHandling/notFoundError')
 
 /**
  * Seeks for a contract by id that belongs to the profile that's requesting.
@@ -14,7 +15,7 @@ async function getContractById(req, res) {
   const { contractsRepository } = req.app.get('repositories')
   const contract = await contractsRepository.findById(req.profile.id, req.profile.type, Number(req.params.id))
 
-  if (!contract) return res.status(404).end()
+  if (!contract) throw new NotFoundError('The given contract cannot be found')
 
   res.json(contract)
 }

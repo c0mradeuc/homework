@@ -6,6 +6,7 @@ const HttpStatus = require('../enums/httpStatus')
 const { baseRouteBuilder } = require('../middleware/errorHandling')
 const validateModel = require('../middleware/validateModel')
 const Joi = require('joi')
+const NotAcceptableError = require('../errorHandling/notAcceptableError')
 
 const totalDebtMaxPercentageDeposit = 0.25
 
@@ -19,14 +20,14 @@ async function depositBalance(req, res) {
   const profile = await profilesRepository.getProfileById(Number(req.params.userId))
   const depositAmount = req.body.amount
 
-  if (profile.type === ProfileType.Contractor) return res.status(HttpStatus.NotAcceptable).json({ message: 'A Contractor profile cannot deposit money into its balance' }).end()
+  if (profile.type === ProfileType.Contractor) throw new NotAcceptableError('A Contractor profile cannot deposit money into its balance')
 
   const contracts = await contractsRepository.findContracts(profile.id, profile.type)
   const contractIds = contracts.map((c) => c.id)
   const unpaidJobs = await jobsRepository.findUnpaidJobs(contractIds)
   const totalDebt = unpaidJobs.reduce((acc, val) => acc + val.price, 0)
 
-  if (depositAmount > totalDebt * totalDebtMaxPercentageDeposit) return res.status(HttpStatus.NotAcceptable).json({ message: 'A a client cant deposit more than 25% his total of jobs to pay' }).end()
+  if (depositAmount > totalDebt * totalDebtMaxPercentageDeposit) throw new NotAcceptableError('A a client cant deposit more than 25% his total of jobs to pay')
 
   const client = await profilesRepository.balanceDeposit(profile.id, depositAmount)
 

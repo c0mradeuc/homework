@@ -1,15 +1,23 @@
+const UnauthorizedError = require('../errorHandling/UnauthorizedError')
+
 const getProfile = async (req, res, next) => {
-  const profileId = req.get('profile_id')
+  try {
+    const profileId = req.get('profile_id')
 
-  if (!profileId) return res.status(401).end()
+    if (!profileId) throw new UnauthorizedError('The profile_id is not present in the headers')
 
-  const { profilesRepository } = req.app.get('repositories')
-  const profile = await profilesRepository.getProfileById(Number(profileId))
+    const { profilesRepository } = req.app.get('repositories')
+    const profile = await profilesRepository.getProfileById(Number(profileId))
 
-  if (!profile) return res.status(401).end()
+    if (!profile) throw new UnauthorizedError('Cannot find a profile with profile_id present in the headers')
 
-  req.profile = profile
-  next()
+    req.profile = profile
+    next()
+  }
+  catch (error) {
+    console.log(error)
+    next(error)
+  }
 }
 
 module.exports = { getProfile }

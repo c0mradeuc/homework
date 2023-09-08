@@ -1,6 +1,10 @@
+const HttpStatus = require('../enums/httpStatus')
 const ModelValidationError = require('../errorHandling/modelValidationError')
 const BadRequestError = require('../errorHandling/badRequestError')
-const HttpStatus = require('../enums/httpStatus')
+const NotAcceptableError = require('../errorHandling/notAcceptableError')
+const ForbbidenError = require('../errorHandling/forbiddenError')
+const NotFoundError = require('../errorHandling/notFoundError')
+const UnauthorizedError = require('../errorHandling/UnauthorizedError')
 
 /**
  * Error handling midleware
@@ -17,6 +21,18 @@ const errorHandling = async (error, req, res, next) => {
   }
   else if (error instanceof BadRequestError) {
     res.status(HttpStatus.BadRequest).json({ message: error.message, error: error.error })
+  }
+  else if (error instanceof UnauthorizedError) {
+    res.status(HttpStatus.Unauthorized).json({ message: error.message, error: error.error })
+  }
+  else if (error instanceof NotAcceptableError) {
+    res.status(HttpStatus.NotAcceptable).json({ message: error.message, error: error.error })
+  }
+  else if (error instanceof ForbbidenError) {
+    res.status(HttpStatus.Forbidden).json({ message: error.message, error: error.error })
+  }
+  else if (error instanceof NotFoundError) {
+    res.status(HttpStatus.NotFound).json({ message: error.message, error: error.error })
   }
   else {
     res.status(HttpStatus.InternalServerError).json({ message: 'Internal Server Error', error: error.message })
