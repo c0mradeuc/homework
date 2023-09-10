@@ -106,3 +106,6 @@ TODO List:
 - Move model relationships in app.js to another file and remove copy from seed
 - Implement per environment config
 - More documentation
+
+Commands
+- Testing: npm run test
